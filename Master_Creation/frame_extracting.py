@@ -24,12 +24,15 @@ def extract_frame(video_file, output_file, frame_number, bbox_min, bbox_max, ass
     """Extract frame from video and add bounding box with label."""
     asset_name = clean_asset_name(asset_name)
     print(video_file)
-    
+    if not os.path.exists(video_file):
+        #exit if video file does not exist
+        print("Video file does not exist:", video_file)
     cap = cv2.VideoCapture(video_file)
     cap.set(cv2.CAP_PROP_POS_FRAMES, frame_number) 
     ret, frame = cap.read()
     
     if ret:
+        print("Frame extracted successfully") ##debug
         x1, y1 = bbox_min[0], bbox_min[1]
         x2, y2 = bbox_max[0], bbox_max[1]
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)

@@ -12,25 +12,25 @@ from Preprocessing.json_correction import validate_and_modify_json
 from kml.create_json import create_kml
 from Insert.fixed_anomaly import upload_to_database_anomaly_F
 
-# validate_and_modify_json()
+validate_and_modify_json()
 
-# extract_asset_frames()
+extract_asset_frames()
 
-# master_file=create_master_sheet()
+master_file=create_master_sheet()
 
-# first_id,last_id=upload_to_database_master_F(master_file)
-# print("** Master file uploaded to database **")
+first_id,last_id=upload_to_database_master_F(master_file)
+print("** Master file uploaded to database **")
 
-# upload_to_database_anomaly_F(master_file)
+upload_to_database_anomaly_F(master_file)
 
-# print("** Anomaly file uploaded to database **")
+print("** Anomaly file uploaded to database **")
 
-# if first_id is not None and last_id is not None:
-#     print(f"First ID in DB: {first_id}, Last ID in DB: {last_id}")
-#     create_kml(first_id, last_id)
+if first_id is not None and last_id is not None:
+    print(f"First ID in DB: {first_id}, Last ID in DB: {last_id}")
+    create_kml(first_id, last_id)
     
-# else:
-#     print("Failed to upload master file to database.")
+else:
+    print("Failed to upload master file to database.")
 
 
 # ## Linear master upload

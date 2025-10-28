@@ -156,7 +156,7 @@ def upload_linear(lhs_df):
                                                     (row_id, asset_id, site_id, Chainage, latitude, longitude, image_path, lhs_rhs,
                                                     number_anomaly, recent_anomaly, current_status, asset_type, created_on, updated_on,
                                                     deleted_on, deleted, recent_anomaly_count, remark, Equipment_id, Description, lane_category,section,material_used,video_name,start_chainage,end_chainage,start_latlong,end_latlong,BBox)
-                                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, '0', NULL, '1', %s, %s, %s, NULL, '0', '0', %s, NULL, NULL, '1', ,%s,%s,%s,%s,%s,%s,%s)"""
+                                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, '0', NULL, '1', %s, %s, %s, NULL, '0', '0', %s, NULL, NULL, '1',NULL ,%s,%s,%s,%s,%s,%s,%s)"""
                                         print(sql)
                                         cursor.execute(sql, (master_id,asset_id,site_id, chainage, latitude, longitude, images,lhs_or_rhs,asset_type,sql_date_time,updated_on,remark,comment,video_name,start_ch,end_ch,start_latlong,end_latlong,bbox))
                                     else:
