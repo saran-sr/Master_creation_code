@@ -1,0 +1,27 @@
+{
+  "server": "anton",
+  "video_folder": "/run/user/1000/gvfs/smb-share:server=anton.local,share=roadis_phase4/ml_support/Oct_2025/Applus - Aus",
+  "json_folder": "/home/saran/POC/Applus_australia/Day/json",
+  "linear_folder": "/home/saran/POC/Applus_australia/Day/linear_json", 
+  "chainage_file": "/home/saran/POC/Applus_australia/Day/Day_processed_output.csv",
+  "site_id":360,
+  "service_road_flag": false,
+  "db_name": "test",
+  "image_directory": "Australia_FP/MASTER/LHS",
+
+
+
+  "kml_input_folder_path": "/home/saran/POC/Applus_australia/Day/kml",
+  "kml_left_right_assets_separate":true,
+  "kml_folder_path": "",
+
+
+  "contract_number": "",
+
+  "anomalies":[
+        "Earth_Works", "Encroachment", "Flex_Banner",
+        "Patch", "Cracks", "Potholes", "Water_Stagnation", "Sand_Accumulation",
+        "Garbage", "Bad_Lane", "Shop_Board", "Wall_Poster","Hoarding","Ductlight_NW","Sand","Rutting","Plant_Overgrown"
+    ]
+}
+
