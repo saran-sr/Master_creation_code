@@ -12,32 +12,41 @@ from Preprocessing.json_correction import validate_and_modify_json
 from kml.create_json import create_kml
 from Insert.fixed_anomaly import upload_to_database_anomaly_F
 
-
-json_location=combine_json_files()
-
-validate_and_modify_json(json_location)
-
-extract_asset_frames(json_location)
-
-master_file=create_master_sheet(json_location)
-
-# first_id,last_id=upload_to_database_master_F(master_file)
-# print("** Master file uploaded to database **")
-
-# upload_to_database_anomaly_F(master_file)
-
-# print("** Anomaly file uploaded to database **")
-
-# if first_id is not None and last_id is not None:
-#     print(f"First ID in DB: {first_id}, Last ID in DB: {last_id}")
-#     create_kml(first_id, last_id)
-    
-# else:
-#     print("Failed to upload master file to database.")
+user_option=input("Do you want to proceed with uploading both " \
+"1.fixed and linear" \
+"2.fixed" \
+"3.linear").strip().lower()
+if user_option not in ['1','2','3']:
+    print("Invalid option selected. Please choose 1, 2, or 3.")
+    sys.exit(1)
 
 
-# ## Linear master upload
-# linear_sheets=linear_master()
+if user_option in ['1','2']:
+    json_location=combine_json_files()
 
-# upload_linear_master(linear_sheets)
+    validate_and_modify_json(json_location)
+
+    extract_asset_frames(json_location)
+
+    master_file=create_master_sheet(json_location)
+
+    first_id,last_id=upload_to_database_master_F(master_file)
+    print("** Master file uploaded to database **")
+
+    upload_to_database_anomaly_F(master_file)
+
+    print("** Anomaly file uploaded to database **")
+
+    if first_id is not None and last_id is not None:
+        print(f"First ID in DB: {first_id}, Last ID in DB: {last_id}")
+        create_kml(first_id, last_id)
+        
+    else:
+        print("Failed to upload master file to database.")
+
+if user_option in ['1','3']:
+    ## Linear master upload
+    linear_sheets=linear_master()
+
+    upload_linear_master(linear_sheets)
 
