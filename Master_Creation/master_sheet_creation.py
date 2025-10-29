@@ -554,7 +554,7 @@ def create_modified_sheet(master_file):
     df.to_csv(modified,index=False)
     df.to_excel(modified.replace(".csv",".xlsx"))
 
-def create_master_sheet():
+def create_master_sheet(json_folder):
     """Main function to orchestrate the entire process"""
     # Configuration from config file
     config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
@@ -564,7 +564,7 @@ def create_master_sheet():
         with open(config_file) as f:
             config = json.load(f)
         
-        json_path = config["json_folder"] + "/**/*.json"
+        json_path = json_folder + "/**/*.json"
         csv_file = config["chainage_file"]
         site_id = config["site_id"]
         rename_flag = True

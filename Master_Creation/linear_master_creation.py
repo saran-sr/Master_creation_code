@@ -192,24 +192,30 @@ def draw_bounding_box(img, bbox, labels=None, color='green', font_scale=1, font_
 
     return img
 
+config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
+config_file = os.path.normpath(config_path) 
+with open(config_file) as f:
+    config = json.load(f)
+if config['server']=="anton":
+    sql = "SELECT asset_id,asset_name,asset_type,asset_synonyms FROM seekright_v3_poc.tbl_asset;"
+    aws_host = "takeleap.in"
+    aws_user = "seekright"
+    aws_password = "Takeleap@123"
+    aws_database = "seekright_v3_poc"
+    aws_port = 3307
 
-aws_host = "takeleap.in"
-aws_user = "seekright"
-aws_password = "Takeleap@123"
-aws_database = "seekright_v3_poc"
-aws_port = 3307
+    asset_mydb = mysql.connector.connect(
+        host=aws_host,
+        user=aws_user,
+        password=aws_password,
+        database=aws_database,
+        port=aws_port
+    )
+if config['server']=="production":
+    asset_mydb = mysql.connector.connect(host='seekright-db.ce3lsmnwzkln.ap-south-1.rds.amazonaws.com',user='admin',password='BXWUCSpjRxEqzxXYTF9e',port='3306') 
+    sql = "SELECT asset_id,asset_name,asset_type,asset_synonyms FROM seekright_v3.tbl_asset;"
 
-asset_mydb = mysql.connector.connect(
-    host=aws_host,
-    user=aws_user,
-    password=aws_password,
-    database=aws_database,
-    port=aws_port
-)
-# asset_mydb = mysql.connector.connect(host='seekright-db.ce3lsmnwzkln.ap-south-1.rds.amazonaws.com',user='admin',password='BXWUCSpjRxEqzxXYTF9e',port='3306') 
 mycursor = asset_mydb.cursor(dictionary=True)
-
-sql = "SELECT asset_id,asset_name,asset_type,asset_synonyms FROM seekright_v3_poc.tbl_asset;"
 mycursor.execute(sql)
 myresult = mycursor.fetchall()
 # print(myresult)

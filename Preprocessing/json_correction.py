@@ -278,7 +278,7 @@ def print_master_anomaly(folder,anomalies):
     
     return master, anomalies_list
 
-def validate_and_modify_json():
+def validate_and_modify_json(folder):
     # Database configuration
     config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
     config_file = os.path.normpath(config_path) 
@@ -287,7 +287,6 @@ def validate_and_modify_json():
         config = json.load(file)
 
     server=config['server']
-    folder=config['json_folder']
     anomalies=config['anomalies']
 
     if server=="anton" or server=="production" or server=="enigma":

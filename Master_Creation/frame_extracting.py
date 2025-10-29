@@ -150,7 +150,7 @@ def backup_json_folder(json_folder):
     files = os.listdir(json_folder)
     shutil.copytree(json_folder, dest_dir, dirs_exist_ok=True)
 
-def extract_asset_frames():
+def extract_asset_frames(json_folder):
 
     config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
     config_file = os.path.normpath(config_path)
@@ -160,7 +160,6 @@ def extract_asset_frames():
     # video_path = r"/run/user/1000/gvfs/smb-share:server=anton.local,share=machinelearning/POC/Kazakhstan/Semey City_2025/LHS"
     # json_folder = "/media/saran/2A70ABF170ABC1C5/POC/Khazakhstan/test"
     video_path = config["video_folder"]
-    json_folder = config["json_folder"]
     assets_dict = get_assets_dict()
     output_lists = []
     

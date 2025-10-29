@@ -112,7 +112,7 @@ def create_file(df,server,kml_folder):
 def create_kml(first_id, last_id):
     config=load_config()
     server=config["server"]
-    kml_input_folder=config['kml_input_folder_path']
+    kml_input_folder=config['json_folder'].replace(config['json_folder'].split("/")[-1],"fixed_kml")
     if not os.path.exists(kml_input_folder):
         os.makedirs(os.path.dirname(kml_input_folder),exist_ok=True)
     
