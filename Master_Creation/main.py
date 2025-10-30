@@ -8,6 +8,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from Insert.fixed_master import upload_to_database_master_F
 from Insert.linear_master import upload_linear_master
+from Insert.linear_anomaly import upload_linear_anomaly
 from Preprocessing.json_correction import validate_and_modify_json
 from kml.create_json import create_kml
 from Insert.fixed_anomaly import upload_to_database_anomaly_F
@@ -29,7 +30,7 @@ combined_flag=False
 
 
 if user_option in ['1','2']:
-    
+
     if user_option =='1':
         json_location=combine_json_files()
     else:  
@@ -60,5 +61,5 @@ if user_option in ['1','3']:
     ## Linear master upload
     linear_sheets=linear_master()
 
-    upload_linear_master(linear_sheets)
-
+    # upload_linear_master(linear_sheets)
+    upload_linear_anomaly(linear_sheets)

@@ -1,12 +1,12 @@
 {
   "server": "production",
   "video_folder": "/run/user/1000/gvfs/smb-share:server=anton.local,share=roadis_phase4/ml_support/Oct_2025/Applus - Aus",
-  "json_folder": "/home/saran/POC/Applus_australia/Day/night_rhs_missed/json",
-  "linear_folder": "/home/saran/POC/Applus_australia/Day/day_rhs_missed/linear", 
-  "chainage_file": "/home/saran/POC/Applus_australia/Day/night_rhs_missed/Night_processed_output.csv",
+  "json_folder": "/home/saran/POC/Applus_australia/code_test/json",
+  "linear_folder": "/home/saran/POC/Applus_australia/code_test/linear folder", 
+  "chainage_file": "/home/saran/POC/Applus_australia/code_test/Day_processed_output1.csv",
   "site_id":363,
   "service_road_flag": false,
-  "db_name": "Applus_Australia",
+  "db_name": "Test_seekright",
   "image_directory": "Applus_Australia/MASTER/RHS/",
   
   "kml_left_right_assets_separate":true, 

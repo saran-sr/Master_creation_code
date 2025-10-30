@@ -1134,7 +1134,6 @@ def Linear_master_main(site_id,contract_no,site_name,jsons,file,video_path,image
         try:
             print("orginal_name",data1['Assets'][i][0])
             asset_name = data1['Assets'][i][0]
-            asset_name=asset_name.replace("Anti_Glare","Anti-Glare").replace("Bridge -Technical_Metal_Barrier","Bridge_-Technical_Metal_Barrier")
             print("asset_name check",asset_name)
             if 'Bad_' in asset_name:
                 bad_or_not = 2
