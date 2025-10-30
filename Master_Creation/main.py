@@ -11,6 +11,7 @@ from Insert.linear_master import upload_linear_master
 from Insert.linear_anomaly import upload_linear_anomaly
 from Preprocessing.json_correction import validate_and_modify_json
 from kml.create_json import create_kml
+from kml.linear_json import linear_kml
 from Insert.fixed_anomaly import upload_to_database_anomaly_F
 from Insert.fixed_master import load_config
 
@@ -61,5 +62,6 @@ if user_option in ['1','3']:
     ## Linear master upload
     linear_sheets=linear_master()
 
-    # upload_linear_master(linear_sheets)
+    firts_id_L,last_id_L=upload_linear_master(linear_sheets)
+    linear_kml(firts_id_L,last_id_L)
     upload_linear_anomaly(linear_sheets)

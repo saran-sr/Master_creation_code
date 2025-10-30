@@ -28,9 +28,8 @@ def upload_anomaly_linear(lhs_df):
     lhs_df=lhs_df.drop(columns=['Position','Start_frame','End_frame','Speed','video_name','Distance','Chainage'])
     tuple_list = []
     dir_name=config['image_directory'] #changeS
-    anomalies = [a.strip().lower() for a in config['anomalies'].split(",")]
+    anomalies = [a.lower() for a in config['anomalies']]
 
-    asset_id_db=0
     for column in lhs_df.columns:
         print("column",column)
         if "Bad_" in column or column.lower().replace("left_","").replace("right_","") in anomalies:

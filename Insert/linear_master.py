@@ -6,8 +6,7 @@ import numpy as np
 import glob,os,json
 from . import fixed_master
 
-
-
+from Insert.fixed_master import get_id_from_db,load_config
 
 def upload_linear(lhs_df):
     config=fixed_master.load_config()
@@ -183,8 +182,10 @@ def upload_linear(lhs_df):
 
 
 def upload_linear_master(linear_sheets):
+    config=load_config()
+    first_linear_id=get_id_from_db(config['server'],config['db_name'])
     for file in  glob.glob(f"{linear_sheets}/*.csv",recursive=True):
         upload_linear(file)
-
-
+    last_linear_id=get_id_from_db(config['server'],config['db_name'])
+    return first_linear_id,last_linear_id
     
