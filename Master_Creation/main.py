@@ -11,18 +11,30 @@ from Insert.linear_master import upload_linear_master
 from Preprocessing.json_correction import validate_and_modify_json
 from kml.create_json import create_kml
 from Insert.fixed_anomaly import upload_to_database_anomaly_F
+from Insert.fixed_master import load_config
 
-user_option=input("Do you want to proceed with uploading both " \
-"1.fixed and linear" \
-"2.fixed" \
-"3.linear").strip().lower()
+
+user_option=input("Uploading options:\n" 
+"1.fixed and linear \n"
+"2.fixed\n" 
+"3.linear\n"
+"Select an option 1 or 2 or 3 :").strip().lower()
 if user_option not in ['1','2','3']:
     print("Invalid option selected. Please choose 1, 2, or 3.")
     sys.exit(1)
 
 
+combined_flag=False
+
+
+
 if user_option in ['1','2']:
-    json_location=combine_json_files()
+    
+    if user_option =='1':
+        json_location=combine_json_files()
+    else:  
+        config=load_config()
+        json_location=config['json_folder']
 
     validate_and_modify_json(json_location)
 

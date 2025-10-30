@@ -50,6 +50,7 @@ def combine_json_files():
     fixed_json_folder=config['json_folder']
     linear_json_folder=config['linear_folder']
     output_folder=fixed_json_folder.replace(fixed_json_folder.split("/")[-1], "combined_fixed_json")
+    os.makedirs(output_folder, exist_ok=True)
     dict=get_names_from_folder(fixed_json_folder,linear_json_folder)
     print(dict)
     for key, value in dict.items():
@@ -59,9 +60,9 @@ def combine_json_files():
             combine(value[0], value[1], key,output_folder)
         else:
             print("Missing either fixed or linear JSON file for key:", key)
-            
+            os.makedirs(f"{output_folder}/{key}", exist_ok=True)
             shutil.copy(value[0], f"{output_folder}/{key}/{key}_final.json")
-        return output_folder
+    return output_folder
 if __name__ == "__main__":
     combine_json_files("/home/saran/POC/Applus_australia/test/json","/home/saran/POC/Applus_australia/test/linear_json")
 
