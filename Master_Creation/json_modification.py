@@ -38,6 +38,27 @@ def combine(fixed_file, linear_file, key,output_folder):
             print("Skipping asset:", linear_data['Assets'][j])
             continue
         combined_data['Assets'].append(linear_data['Assets'][j])
+    # seen = set()
+    # new_list = []
+    # for d in combined_data['Assets']:
+        
+    #     if d not in seen:
+    #         seen.add(d)
+    #         new_list.append(d)
+    
+    # combined_data['Assets'] = new_list
+    print(type(combined_data['Assets']))
+    #remove duplicate from list
+    print(combined_data['Assets'])
+    seen = set()
+    unique_assets = []
+    for asset in combined_data['Assets']:
+        asset_str = str(asset)
+        if asset_str not in seen:
+            seen.add(asset_str)
+            unique_assets.append(asset)
+    combined_data['Assets'] = unique_assets
+    # exit()
     with open(combined_file_path, "w") as combined_file:
         combined_file.write(str(combined_data))
     

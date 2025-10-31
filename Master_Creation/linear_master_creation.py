@@ -215,6 +215,11 @@ if config['server']=="production":
     asset_mydb = mysql.connector.connect(host='seekright-db.ce3lsmnwzkln.ap-south-1.rds.amazonaws.com',user='admin',password='BXWUCSpjRxEqzxXYTF9e',port='3306') 
     sql = "SELECT asset_id,asset_name,asset_type,asset_synonyms FROM seekright_v3.tbl_asset;"
 
+if config['server']=="enigma":
+    asset_mydb  = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3307')
+    
+    sql = "SELECT asset_id,asset_name,asset_type,asset_synonyms FROM seekright_v3_poc.tbl_asset;"
+
 mycursor = asset_mydb.cursor(dictionary=True)
 mycursor.execute(sql)
 myresult = mycursor.fetchall()
@@ -937,6 +942,7 @@ def process_asset_pair(start_asset,end_asset,i,video_name,video_file,final_data,
                 try:
                     if 'Bad_' in new_asset_name and temp_data[0]['Start_Frame'][-3] == "":
                         temp_data[0]['Start_Frame'][-3] = "Damaged"
+                    
                     new_tuple = (temp_data[0]['Start_Frame'][3], temp_data[1]['End_Frame'][3], temp_data[2]['Middle_Frame'][3],
                                  temp_data[0]['Start_Frame'][4], temp_data[1]['End_Frame'][4], temp_data[2]['Middle_Frame'][4],
                                  str(temp_data[0]['Start_Frame'][2]), str(temp_data[1]['End_Frame'][2]), str(asset_id),

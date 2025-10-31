@@ -83,45 +83,12 @@ class AssetNameValidator:
         print(f"Found {len(self.unknown_assets)} unique unknown asset names")
     
     def find_closest_matches(self):
-        """Find closest matches for unknown asset names with lenient matching."""
+        """Find closest matches for unknown asset names."""
         print("🔗 Finding closest matches for unknown assets...")
         
-        # Create lowercase versions for case-insensitive matching
-        known_lower = [name.lower() for name in self.known_asset_names]
-        
-        # Directional synonyms
-        directional_synonyms = {
-            'directional': 'direction',
-            'direction': 'directional'
-        }
-        
         for unknown_name in self.unknown_assets.keys():
-            best_match = None
-            
-            # Try exact case-insensitive match first
-            unknown_lower = unknown_name.lower()
-            if unknown_lower in known_lower:
-                idx = known_lower.index(unknown_lower)
-                best_match = self.known_asset_names[idx]
-            else:
-                # Try directional synonyms
-                for synonym, replacement in directional_synonyms.items():
-                    if synonym in unknown_lower:
-                        test_name = unknown_lower.replace(synonym, replacement)
-                        if test_name in known_lower:
-                            idx = known_lower.index(test_name)
-                            best_match = self.known_asset_names[idx]
-                            break
-                
-                # If no exact match, use difflib with lower cutoff for more lenient matching
-                if not best_match:
-                    # Try case-insensitive fuzzy matching
-                    close = difflib.get_close_matches(unknown_lower, known_lower, n=1, cutoff=0.4)
-                    if close:
-                        idx = known_lower.index(close[0])
-                        best_match = self.known_asset_names[idx]
-            
-            self.matches_dict[unknown_name] = best_match
+            close = difflib.get_close_matches(unknown_name, self.known_asset_names, n=1, cutoff=0.6)
+            self.matches_dict[unknown_name] = close[0] if close else None
         
         # Separate matched and unmatched
         matched = {k: v for k, v in self.matches_dict.items() if v is not None}
@@ -299,7 +266,7 @@ def print_master_anomaly(folder,anomalies):
 
         
             if "Bad_Lane" not in asset_name:
-                asset_name = asset_name.replace("LEFT_", "").replace("RIGHT_", "").replace("_Start", "").replace("_End", "").replace("Bad_","").replace("_START","").replace("_END","").strip()
+                asset_name = asset_name.replace("LEFT_", "").replace("RIGHT_", "").replace("_Start", "").replace("_End", "").replace("Bad_","").strip()
             else:
                 asset_name = asset_name.replace("LEFT_", "").replace("RIGHT_", "").replace("_Start", "").replace("_End", "").strip()
             if asset_name not in anomalies and asset_name not in master:
