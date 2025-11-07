@@ -162,8 +162,15 @@ def extract_asset_frames(json_folder):
     video_path = config["video_folder"]
     assets_dict = get_assets_dict()
     output_lists = []
-    
+    videos_in_csv=[]
+    chinage_file=config['chainage_file']
+    df_chainage=pd.read_csv(chinage_file)
+    videos_in_csv=list(df_chainage['video_name'].unique())
     for file in glob.glob(json_folder + "/**/*.json"):
+        video_name = str(file.split("/")[-2])
+        if video_name not in videos_in_csv:
+            print(f"Skipping {video_name} as it is not in the chainage file.")
+            continue
         file_output_lists = process_json_file(file, video_path, assets_dict)
         output_lists.extend(file_output_lists)
     

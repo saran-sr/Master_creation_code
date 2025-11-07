@@ -25,7 +25,7 @@ def setup_database_connection(server):
     elif server=="production":
         conx= mysql.connector.connect(host='seekright-db.ce3lsmnwzkln.ap-south-1.rds.amazonaws.com',user='admin',password='BXWUCSpjRxEqzxXYTF9e',port='3306')
     elif server=="enigma":
-        conx = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3306')
+        conx = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3307')
     
     return conx
 
@@ -40,7 +40,7 @@ def fetch_asset_data(server):
         elif server=="production":
             assets_db_name="seekright_v3"
         elif server=="enigma":
-            assets_db_name="seekright_v3_poc"
+            assets_db_name="seekright_v3_enigma"
         else:
             print("Invalid server name")        
         sql = f"SELECT asset_id,asset_name,asset_type,asset_synonyms FROM {assets_db_name}.tbl_asset;"
@@ -430,7 +430,7 @@ def process_master_data(json_files, final_data, d2, map_assets, site_id,
                                 
                                 count = count + 1
                                 new_master = master_id.replace(master_id.split("_")[2], str(ch))
-                                if service_road_flag==True:
+                                if service_road_flag==1:
                                     new_master = "SR_" + new_master
                                 
                                 new_img_path = f"/{base_path}/{new_master}.jpeg"
@@ -568,7 +568,7 @@ def create_master_sheet(json_folder):
         csv_file = config["chainage_file"]
         site_id = config["site_id"]
         rename_flag = True
-        service_road_flag = config.get('service_road_flag', False)
+        service_road_flag = config['service_road_flag']
         server=config['server']
         
         print(f"Configuration loaded from: {config_file}")

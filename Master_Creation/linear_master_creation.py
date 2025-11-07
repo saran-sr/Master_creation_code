@@ -218,7 +218,7 @@ if config['server']=="production":
 if config['server']=="enigma":
     asset_mydb  = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3307')
     
-    sql = "SELECT asset_id,asset_name,asset_type,asset_synonyms FROM seekright_v3_poc.tbl_asset;"
+    sql = "SELECT asset_id,asset_name,asset_type,asset_synonyms FROM seekright_v3_enigma.tbl_asset;"
 
 mycursor = asset_mydb.cursor(dictionary=True)
 mycursor.execute(sql)
@@ -942,11 +942,16 @@ def process_asset_pair(start_asset,end_asset,i,video_name,video_file,final_data,
                 try:
                     if 'Bad_' in new_asset_name and temp_data[0]['Start_Frame'][-3] == "":
                         temp_data[0]['Start_Frame'][-3] = "Damaged"
-                    
+                    if temp_data[0]['Start_Frame'][4] <= 30:
+                        start_or_end_flag="Linear_asset_at_video_start"
+                    elif temp_data[1]['End_Frame'][4] >= 8970:
+                        start_or_end_flag="Linear_asset_at_video_end"
+                    else:
+                        start_or_end_flag="NA"
                     new_tuple = (temp_data[0]['Start_Frame'][3], temp_data[1]['End_Frame'][3], temp_data[2]['Middle_Frame'][3],
                                  temp_data[0]['Start_Frame'][4], temp_data[1]['End_Frame'][4], temp_data[2]['Middle_Frame'][4],
                                  str(temp_data[0]['Start_Frame'][2]), str(temp_data[1]['End_Frame'][2]), str(asset_id),
-                                 video_name, temp_data[0]['Start_Frame'][-3], temp_data[0]['Start_Frame'][-2],temp_data[0]['Start_Frame'][-1],temp_data[1]['End_Frame'][-1])
+                                 video_name, temp_data[0]['Start_Frame'][-3], temp_data[0]['Start_Frame'][-2],temp_data[0]['Start_Frame'][-1],temp_data[1]['End_Frame'][-1],start_or_end_flag)
                     print(new_tuple)
                 except Exception as ex:
                     print("ex for bad",ex)
@@ -1315,7 +1320,7 @@ def Linear_master_main(site_id,contract_no,site_name,jsons,file,video_path,image
         asset_name = asset[0] # Assuming the asset name is the first element
         asset_name=asset_name.replace("Anti_Glare","Anti-Glare").replace("Bridge -Technical_Metal_Barrier","Bridge_-Technical_Metal_Barrier")
         for criterion in unique_values:
-            clean_asset_name = asset_name.replace('LEFT_', '').replace('RIGHT_', '').replace('_Start', '').replace('_End', '')
+            clean_asset_name = asset_name.replace('LEFT_', '').replace('RIGHT_', '').replace('_Start', '').replace('_End', '').replace("_START","").replace("_END","")
             print("clean_asset_name",clean_asset_name)
             if not "NW" in clean_asset_name:
                 clean_asset_name=clean_asset_name.replace("Underpass_Luminaire","Under_Pass_Luminaire")
@@ -1336,7 +1341,7 @@ def Linear_master_main(site_id,contract_no,site_name,jsons,file,video_path,image
             if "Underpass_Luminaire" in val:
                 val=val.replace("Underpass_Luminaire","Under_Pass_Luminaire")
         print("assets",assets)
-        main_asset_name = assets[0][0].replace('LEFT_','').replace('RIGHT_','').replace('_Start','').replace('_End','')
+        main_asset_name = assets[0][0].replace('LEFT_','').replace('RIGHT_','').replace('_Start','').replace('_End','').replace("_START","").replace("_END","")
         print(main_asset_name)
         print("$$$$$assets$$$$$")
         if filtered_data[i]['Assets'] != []:
@@ -1437,15 +1442,21 @@ def linear_master():
     site_id=config['site_id']
     count=0
     contract_no=1
-    for file in glob.glob(config['linear_folder']+"/json/**/*.json"):
+    for root,dirs,files in os.walk(config['linear_folder']):
         # file_name=file.split("/")[-1].split("F_")[0]+"F"
-        file_name=file.split("/")[-1].split("_final.json")[0]
-        print(file_name)
-        video_path=f"{video_base_path}/{file_name}.MP4"
-        jsons=file
-        csv_file=csv_folder+f"/{file_name}.csv"
-        Linear_master_main(site_id,contract_no,site_name,jsons,csv_file,video_path,image_saving_folder,count)
-        count=count+1
+        for file in files:
+            if not file.endswith("_final.json"):
+                continue
+            file_path=os.path.join(root,file)
+            file_name=file_path.split("/")[-1].split("_final.json")[0]
+            print(file_name)
+            video_path=f"{video_base_path}/{file_name}.MP4"
+            jsons=file_path
+            csv_file=csv_folder+f"/{file_name}.csv"
+            if not os.path.exists(csv_file):
+                continue
+            Linear_master_main(site_id,contract_no,site_name,jsons,csv_file,video_path,image_saving_folder,count)
+            count=count+1
 
     def add_dist_column(folder):
         os.makedirs(folder+"/output",exist_ok=True)

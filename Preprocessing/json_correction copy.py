@@ -28,7 +28,7 @@ class AssetNameValidator:
             elif server=="production":
                 assets_db_name="seekright_v3"
             elif server=="enigma":
-                assets_db_name="seekright_v3_poc"
+                assets_db_name="seekright_v3_enigma"
             else:
                 print("Invalid server name")
             sql = f"SELECT asset_id, asset_name, asset_type, asset_synonyms FROM {assets_db_name}.tbl_asset;"

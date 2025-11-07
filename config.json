@@ -1,13 +1,13 @@
 {
   "server": "enigma",
   "video_folder": "/run/user/1000/gvfs/smb-share:server=anton.local,share=roadis_phase4/ml_support/Qatar oct-2025/Green Zone/GREEN Zone Main Roads ( 12 &13-Oct-2025)/Green - Main Road - Doha Road, Al Khor, Qatar (12-Oct-2025)",
-  "json_folder": "/home/saran/POC/Qatar_Main/Green_Zone/Green - Main Road - Doha Road, Al Khor, Qatar (12-Oct-2025)/Straight/LHS/json",
-  "linear_folder": "/home/saran/POC/Qatar_Main/Green_Zone/Green - Main Road - Doha Road, Al Khor, Qatar (12-Oct-2025)/Straight/LHS/linear_folder", 
-  "chainage_file": "/home/saran/POC/Qatar_Main/Green_Zone/Green - Main Road - Doha Road, Al Khor, Qatar (12-Oct-2025)/Straight/LHS/processed_output1.csv",
-  "site_id":357,
-  "service_road_flag": false,
+  "json_folder": "/home/saran/POC/Qatar_Main/Green_Zone/Green - Main Road - Doha Road, Al Khor, Qatar (12-Oct-2025)/Straight/RHS/json",
+  "linear_folder": "/home/saran/POC/Qatar_Main/Green_Zone/Green - Main Road - Doha Road, Al Khor, Qatar (12-Oct-2025)/Straight/RHS/linear_folder", 
+  "chainage_file": "/home/saran/POC/Qatar_Main/Green_Zone/Green - Main Road - Doha Road, Al Khor, Qatar (12-Oct-2025)/Straight/RHS/processed_output.csv",
+  "site_id":358,
+  "service_road_flag": 0,
   "db_name": "Gulf_BD",
-  "image_directory": "Qatar/Green_Zone/MASTER/LHS/",
+  "image_directory": "Gulf_BD/Green_Zone/MASTER/RHS/",
   
   "kml_left_right_assets_separate":true, 
   "kml_folder_path": "",
@@ -18,7 +18,7 @@
   "anomalies":[
         "Earth_Works", "Encroachment", "Flex_Banner",
         "Patch", "Cracks", "Potholes", "Water_Stagnation", "Sand_Accumulation",
-        "Garbage", "Bad_Lane", "Shop_Board", "Wall_Poster","Hoarding","Ductlight_NW","Sand","Rutting","Plant_Overgrown"
+        "Garbage", "Bad_Lane", "Shop_Board", "Wall_Poster","Hoarding","Ductlight_NW","Sand","Rutting","Plant_Overgrown","Graffiti"
     ]
 }
 

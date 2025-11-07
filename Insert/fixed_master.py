@@ -28,7 +28,7 @@ def get_database_connection(server):
 	elif server=="production":
 		conx= mysql.connector.connect(host='seekright-db.ce3lsmnwzkln.ap-south-1.rds.amazonaws.com',user='admin',password='BXWUCSpjRxEqzxXYTF9e',port='3306')
 	elif server=="enigma":
-		conx = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3306')
+		conx = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3307')
 	
 	return conx
 def get_id_from_db(server,db_name):
@@ -62,7 +62,7 @@ def fetch_asset_data(cursor,server):
 	elif server=="production":
 		assets_db_name="seekright_v3"
 	elif server=="enigma":
-		assets_db_name="seekright_v3_poc"
+		assets_db_name="seekright_v3_enigma"
 	else:
 		print("Invalid server name")
 
@@ -197,7 +197,7 @@ def upload_to_database_master_F(master_file):
 	
 	# Configuration values - using your specific logic
 	site_id = config['site_id']
-	lane_category_i = 1 if config.get('service_road_flag', False) else 3
+	lane_category_i = 1 if config.get('service_road_flag', 0) else 3
 	dir_name = config['image_directory']
 	if dir_name[-1] !="/":
 		dir_name=dir_name+"/"
@@ -252,15 +252,17 @@ def upload_to_database_master_F(master_file):
 						if type(tup) is None:
 							continue
 						total_records += 1
-						
+						if "bad_" in tup[-1].lower():
+							continue
 						# Extract data from tuple
 						master_id = tup[0]
 						chainage = tup[3]
 						location_str = tup[4]
 						video_name = tup[6]
-						frame= tup[5]
+						
+						frame=str(tup[5])
 						bbox = str(tup[-2])
-						# bbox=str(bbox,frame)
+						bbox = str(bbox)
 						remark = tup[-3]
 						
 						# Parse location
@@ -279,7 +281,7 @@ def upload_to_database_master_F(master_file):
 						
 						# Insert into database
 						try:
-							if server=="anton":
+							if server=="anton" or server=="engima":
 								if add_datetime_:
 									print(master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, sql_date_time, lane_category_i, video_name)
 									values=(master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, sql_date_time, lane_category_i, video_name,bbox)
@@ -305,27 +307,27 @@ def upload_to_database_master_F(master_file):
 									successful_inserts += 1                            
 							else:
 								if add_datetime_:
-									print(master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, sql_date_time, lane_category_i, video_name)
+									print(master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, sql_date_time, lane_category_i, video_name,bbox)
 									values=(master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, sql_date_time, lane_category_i, video_name,bbox)
 									for val in values:
 										print(val, type(val))
 									sql = f"""INSERT INTO {db_name}.tbl_site_asset
 											(row_id, asset_id, site_id, Chainage, latitude, longitude, image_path, lhs_rhs, 
 											number_anomaly, recent_anomaly, current_status, asset_type, created_on, updated_on, 
-											deleted_on, deleted, recent_anomaly_count, remark, Equipment_id, Description, lane_category, video_name) 
-											VALUES (%s, %s, %s, %s, %s, %s, %s, %s, '0', NULL, '1', %s, %s, NULL, NULL, '0', '0', %s, NULL, NULL, %s, %s)"""
-									cursor.execute(sql, (master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, sql_date_time, remark, lane_category_i, video_name))
+											deleted_on, deleted, recent_anomaly_count, remark, Equipment_id, Description, lane_category, video_name,BBox) 
+											VALUES (%s, %s, %s, %s, %s, %s, %s, %s, '0', NULL, '1', %s, %s, NULL, NULL, '0', '0', %s, NULL, NULL, %s, %s,%s)"""
+									cursor.execute(sql, (master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, sql_date_time, remark, lane_category_i, video_name,bbox))
 									successful_inserts += 1
 									
 								elif add_datetime_ == False:
-									print(master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, lane_category_i, video_name)
+									print(master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, lane_category_i, video_name,bbox)
 									
 									sql = f"""INSERT INTO {db_name}.tbl_site_asset
 											(row_id, asset_id, site_id, Chainage, latitude, longitude, image_path, lhs_rhs, 
 											number_anomaly, recent_anomaly, current_status, asset_type, created_on, updated_on, 
-											deleted_on, deleted, recent_anomaly_count, remark, Equipment_id, Description, lane_category, video_name) 
-											VALUES (%s, %s, %s, %s, %s, %s, %s, %s, '0', NULL, '1', %s, NULL, NULL, NULL, '0', '0', %s, NULL, NULL, %s, %s)"""
-									cursor.execute(sql, (master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, remark, lane_category_i, video_name))
+											deleted_on, deleted, recent_anomaly_count, remark, Equipment_id, Description, lane_category, video_name,BBox) 
+											VALUES (%s, %s, %s, %s, %s, %s, %s, %s, '0', NULL, '1', %s, NULL, NULL, NULL, '0', '0', %s, NULL, NULL, %s, %s,%s)"""
+									cursor.execute(sql, (master_id, asset_id, site_id, chainage, latitude, longitude, image_path, lhs_or_rhs, asset_type, remark, lane_category_i, video_name,bbox))
 									successful_inserts += 1                                
 							if successful_inserts % 100 == 0:
 								print(f"Processed {successful_inserts} records...")
@@ -354,4 +356,4 @@ def upload_to_database_master_F(master_file):
 	print("Done")
 
 if __name__ == "__main__":
-	upload_to_database_master_F()
+	upload_to_database_master_F("/home/saran/POC/Qatar_Main/Green_Zone/Green - Main Road - 7FWG+F27, Doha Expressway, Doha, Qatar+North Road, Qatar (12-Oct-2025)/Staright_Line_Lhs/processed_output_master.csv")

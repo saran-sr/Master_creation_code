@@ -65,9 +65,9 @@ def upload_linear(lhs_df):
                                 if not tup in tuple_list:
                                     master_id=tup[9]
                                     print(master_id)
-                                    asset_id = tup[-6]
-                                    chainage_r=round(float(tup[-7]),3)
-                                    if service_road:
+                                    asset_id = tup[-7]
+                                    chainage_r=round(float(tup[-8]),3)
+                                    if service_road==1:
                                         master_id="SR_1_" + str(site_id)+"_"+str(asset_id)+"_"+str(chainage_r) + "_" +str(lhs_or_rhs)
                                     else:
                                         master_id="1_" + str(site_id)+"_"+str(asset_id)+"_"+str(chainage_r) + "_" +str(lhs_or_rhs)
@@ -140,11 +140,11 @@ def upload_linear(lhs_df):
 
                                     tuple_list.append(tup)
 
-                                    bbox = f"{tup[-2]},{tup[-1]}"
+                                    bbox = f"{tup[-3]},{tup[-2]}"
                                     print(bbox,type(bbox))
                                     if add_date:
                                         print(master_id,asset_id,site_id, chainage, latitude, longitude, images,lhs_or_rhs,asset_type,sql_date_time,remark,comment,video_name,start_ch,end_ch,start_latlong,end_latlong,bbox,updated_on)
-                                        if service_road:
+                                        if service_road==1:
                                             sql = f"""INSERT INTO {db_name}.tbl_site_asset
                                                         (row_id, asset_id, site_id, Chainage, latitude, longitude, image_path, lhs_rhs,
                                                         number_anomaly, recent_anomaly, current_status, asset_type, created_on, updated_on,
@@ -160,7 +160,7 @@ def upload_linear(lhs_df):
                                         cursor.execute(sql, (master_id,asset_id,site_id, chainage, latitude, longitude, images,lhs_or_rhs,asset_type,sql_date_time,updated_on,remark,comment,video_name,start_ch,end_ch,start_latlong,end_latlong,bbox))
                                     else:
                                         print(master_id,asset_id,site_id, chainage, latitude, longitude, images,lhs_or_rhs,asset_type,remark,comment,video_name,start_ch,end_ch,start_latlong,end_latlong,bbox,updated_on)
-                                        if service_road:
+                                        if service_road==1:
                                             sql = f"""INSERT INTO {db_name}.tbl_site_asset
                                                         (row_id, asset_id, site_id, Chainage, latitude, longitude, image_path, lhs_rhs,
                                                         number_anomaly, recent_anomaly, current_status, asset_type, created_on, updated_on,

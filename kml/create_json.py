@@ -1,7 +1,9 @@
 import json,os
 import pandas as pd
+import mysql.connector
 from db.connect import get_database_connection
 from Insert.fixed_master import load_config
+
 
 
 def get_asset_name(df,server):
@@ -10,12 +12,13 @@ def get_asset_name(df,server):
     elif server=="production":
         assets_db_name="seekright_v3"
     elif server=="enigma":
-        assets_db_name="seekright_v3_poc"
+        assets_db_name="seekright_v3_enigma"
     else:
         print("Invalid server name")
 
     sql=f"SELECT asset_name FROM {assets_db_name}.tbl_asset where asset_id=%s;"
     conx=get_database_connection(server)
+
     cur=conx.cursor()
     names=[]
     for i in range(len(df["asset_id"])):
@@ -73,12 +76,13 @@ def get_asset_name(df,server):
         df['image_path']=string_to_add+df['image_path']
     elif server=="enigma":
         string_to_add="https://images.seekright.ai/"
-        assets_db_name="seekright_v3_poc"
+        assets_db_name="seekright_v3_enigma"
         df['image_path']=string_to_add+df['image_path']
     else:
         print("Invalid server name")
 
     sql=f"SELECT asset_name FROM {assets_db_name}.tbl_asset where asset_id=%s;"
+    
     conx=get_database_connection(server)
     cur=conx.cursor()
     names=[]
@@ -87,8 +91,6 @@ def get_asset_name(df,server):
         result=cur.fetchone()
         names.append(result[0])
     df['asset_name']=names
-    
-    
     return df
 
 def get_asset_with_large_count(df):
@@ -122,7 +124,8 @@ def create_kml(first_id, last_id):
     csv_file_path=kml_input_folder+"/site_asset_data.csv"
     os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
     os.makedirs(os.path.dirname(db_file_save_location), exist_ok=True)
-    conx = get_database_connection(server)
+    conx = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3307')
+    # conx = get_database_connection(server)
     if conx is None:
         print("Failed to connect to the database.")
         return
@@ -142,12 +145,14 @@ def create_kml(first_id, last_id):
     #     return
     
     cursor.execute(f"SELECT * FROM {db_name}.tbl_site_asset WHERE id BETWEEN {first_id} AND {last_id};")
+    
     print(f"SELECT * FROM {db_name}.tbl_site_asset WHERE id BETWEEN {first_id} AND {last_id};")
 
     data = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]  # fix: extract column names
     
-    df = pd.DataFrame(data, columns=columns)  # apply column names
+    df = pd.DataFrame(data, columns=columns) 
+    print("df shape",df.shape) # apply column names
     df=get_asset_name(df,server)
     if config['kml_left_right_assets_separate']:
         left_street_light = df[(df['asset_id'] == 33) & (df['lhs_rhs'] == 1)]
@@ -175,6 +180,7 @@ def create_kml(first_id, last_id):
     print(f"Data saved to {kml_input_folder}")    
     
     
+
 
 
  

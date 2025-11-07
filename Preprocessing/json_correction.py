@@ -28,7 +28,7 @@ class AssetNameValidator:
             elif server=="production":
                 assets_db_name="seekright_v3"
             elif server=="enigma":
-                assets_db_name="seekright_v3_poc"
+                assets_db_name="seekright_v3_enigma"
             else:
                 print("Invalid server name")
             sql = f"SELECT asset_id, asset_name, asset_type, asset_synonyms FROM {assets_db_name}.tbl_asset;"
@@ -47,9 +47,9 @@ class AssetNameValidator:
         asset_name = raw_name.replace("\n", "")
         
         if "Bad_Lane" not in asset_name:
-            asset_name = asset_name.replace("LEFT_", "").replace("RIGHT_", "").replace("_Start", "").replace("_End", "").replace("Bad_","").strip()
+            asset_name = asset_name.replace("LEFT_", "").replace("RIGHT_", "").replace("_Start", "").replace("_End", "").replace("Bad_","").replace("_START","").replace("_END","").strip()
         else:
-            asset_name = asset_name.replace("LEFT_", "").replace("RIGHT_", "").replace("_Start", "").replace("_End", "").strip()
+            asset_name = asset_name.replace("LEFT_", "").replace("RIGHT_", "").replace("_Start", "").replace("_End", "").replace("_START","").replace("_END","").strip()
         
         return asset_name
     
@@ -89,10 +89,12 @@ class AssetNameValidator:
         # Create lowercase versions for case-insensitive matching
         known_lower = [name.lower() for name in self.known_asset_names]
         
-        # Directional synonyms
+        # Directional synonyms and specific replacements
         directional_synonyms = {
             'directional': 'direction',
-            'direction': 'directional'
+            'direction': 'directional',
+            'traffic_signal_acos': 'Traffic_Signal_Junction',
+
         }
         
         for unknown_name in self.unknown_assets.keys():
@@ -106,8 +108,8 @@ class AssetNameValidator:
             else:
                 # Try directional synonyms
                 for synonym, replacement in directional_synonyms.items():
-                    if synonym in unknown_lower:
-                        test_name = unknown_lower.replace(synonym, replacement)
+                    if unknown_lower == synonym.lower():
+                        test_name = replacement.lower()
                         if test_name in known_lower:
                             idx = known_lower.index(test_name)
                             best_match = self.known_asset_names[idx]

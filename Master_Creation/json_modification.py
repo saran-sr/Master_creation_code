@@ -1,5 +1,23 @@
 import os,shutil,ast,json
 
+def copy_to_linear_folder(json_location):
+    config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
+    config_file = os.path.normpath(config_path)
+    with open(config_file) as f:
+        config = json.load(f)
+    linear_folder=config['linear_folder']
+    #delete linear_folder
+    os.system(f"rm -rf {linear_folder}")
+    if not os.path.exists(linear_folder):
+        os.makedirs(linear_folder)
+    for root, dirs, files in os.walk(json_location):
+        for file in files:
+            if file.endswith(".json"):
+                print(f"Found JSON file: {file}")
+                shutil.copy(os.path.join(root, file), os.path.join(linear_folder, file))
+                print(f"Copied {file} to {linear_folder}")
+
+
 def get_names_from_folder(fixed_json_folder,linear_json_folder):
     files_match={}
     for root, dirs, files in os.walk(fixed_json_folder):

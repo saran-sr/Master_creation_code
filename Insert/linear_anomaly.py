@@ -64,11 +64,11 @@ def upload_anomaly_linear(lhs_df):
                                 tup = k
                                 if not tup in tuple_list:
                                     master_id=tup[9]
-                                    asset_id = tup[-6]
-                                    if service_road:
-                                        master_id="SR_1_" + str(site_id)+"_"+str(asset_id)+"_"+str(tup[-7]) + "_" +str(lhs_or_rhs)
+                                    asset_id = tup[-7]
+                                    if service_road==1:
+                                        master_id="SR_1_" + str(site_id)+"_"+str(asset_id)+"_"+str(tup[-8]) + "_" +str(lhs_or_rhs)
                                     else:    
-                                        master_id="1_" + str(site_id)+"_"+str(asset_id)+"_"+str(tup[-7]) + "_" +str(lhs_or_rhs)
+                                        master_id="1_" + str(site_id)+"_"+str(asset_id)+"_"+str(tup[-8]) + "_" +str(lhs_or_rhs)
                                     chainage=tup[6]
                                     location_str=tup[2]
                                     minus_flag=False
@@ -138,7 +138,7 @@ def upload_anomaly_linear(lhs_df):
                                     # sql="""Update Test_db1.tbl_site_asset set image_path=%s where row_id=master"""
                                     tuple_list.append(tup)
                                     # extra_column_value = ""
-                                    bbox = f"{tup[-2]},{tup[-1]}"
+                                    bbox = f"{tup[-3]},{tup[-2]}"
                                     print(bbox,type(bbox))
 
                                     # row_id_count = row_id_count +1

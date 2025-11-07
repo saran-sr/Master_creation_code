@@ -28,7 +28,7 @@ def get_database_connection(server):
 	elif server=="production":
 		conx= mysql.connector.connect(host='seekright-db.ce3lsmnwzkln.ap-south-1.rds.amazonaws.com',user='admin',password='BXWUCSpjRxEqzxXYTF9e',port='3306')
 	elif server=="enigma":
-		conx = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3306')
+		conx = mysql.connector.connect(host='mariadb.seekright.ai', user='enigma', password='Takeleap@123', port='3307')
 	
 	return conx
 
@@ -40,7 +40,7 @@ def fetch_asset_data(cursor,server):
 	elif server=="production":
 		assets_db_name="seekright_v3"
 	elif server=="enigma":
-		assets_db_name="seekright_v3_poc"
+		assets_db_name="seekright_v3_enigma"
 	else:
 		print("Invalid server name")
 
@@ -175,7 +175,7 @@ def upload_to_database_anomaly_F(master_file):
 	
 	# Configuration values - using your specific logic
 	site_id = config['site_id']
-	lane_category_i = 1 if config.get('service_road_flag', False) else 3
+	lane_category_i = 1 if config.get('service_road_flag', 0) else 3
 	dir_name = config['image_directory']
 	if dir_name[-1] !="/":
 		dir_name=dir_name+"/"

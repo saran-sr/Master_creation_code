@@ -33,7 +33,7 @@ def get_asset_name(df,server):
         # df['image_path']=string_to_add+df['image_path']
     elif server=="enigma":
         # string_to_add="https://images.seekright.ai/"
-        assets_db_name="seekright_v3_poc"
+        assets_db_name="seekright_v3_enigma"
         # df['image_path']=string_to_add+df['image_path']
     else:
         print("Invalid server name")
